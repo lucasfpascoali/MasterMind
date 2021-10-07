@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 
 require './display'
 
@@ -10,18 +9,6 @@ class Code
 
   def initialize(mode)
     @code = mode == '1' ? user_code : generate_code
-  end
-
-  def code_clues(input_code, master_code = @code)
-    clues = Hash.new(0)
-    (0...master_code.length).each do |i|
-      if master_code[i] == input_code[i]
-        clues[:right] += 1
-      elsif master_code.include?(input_code[i])
-        clues[:wrong_place] += 1
-      end
-    end
-    clues
   end
 
   def user_code

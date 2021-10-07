@@ -3,10 +3,12 @@
 require './code'
 require './mode'
 require './display'
+require './game_logic'
 
 # Control the game
 class Game
   include Display
+  include GameLogic
 
   attr_reader :master_code, :mode, :turn
 
@@ -35,7 +37,8 @@ class Game
     show_code(user_input.split(''))
     return true if user_input == master_code.code
 
-    clues = master_code.code_clues(user_input)
+    get_clues(user_input, master_code.code)
+    clues = @clues
     show_clues(clues[:right], clues[:wrong_place])
     false
   end
