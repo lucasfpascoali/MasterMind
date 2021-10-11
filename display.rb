@@ -2,28 +2,7 @@
 
 # Module: Display information about the game
 module Display
-
-  def ask_maker_code
-    puts 'Type 4 numbers between 1-6 to make a code'
-  end
-
-  def invalid_maker_code
-    puts 'Type only 4 numbers between 1-6'
-  end
-
-  def breaker_turn_description(turn)
-    print "Turn #{turn}: "
-  end
-
-  def breaker_outputs(win, master_code)
-    if win
-      puts 'You broke the code!!!'
-    else
-      print 'The master code was: '
-      show_code(master_code.split(''))
-    end
-  end
-
+  # MODE
   def ask_mode
     puts 'Which mode you would like to be? Maker or Code Breaker?'
     puts 'Type one of the options below: '
@@ -35,6 +14,22 @@ module Display
     puts 'Type one of the options: 1 or 2'
   end
 
+  # MAKER
+  def ask_maker_code
+    puts 'Type 4 numbers between 1-6 to make a code'
+  end
+
+  # BREAKER
+  def breaker_turn_description(turn)
+    puts "Turn #{turn}: Type 4 numbers between 1-6 to guess the code"
+  end
+
+  # BOTH MODES
+  def invalid_code
+    puts 'Type only 4 numbers between 1-6'
+  end
+
+  # OUTPUTS
   def code_colors(number)
     {
       '1' => "\e[101m  1  \e[0m ",

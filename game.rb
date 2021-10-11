@@ -1,59 +1,40 @@
 # frozen_string_literal: true
 
-require './code'
-require './mode'
 require './display'
 require './game_logic'
+require './code_breaker'
+require './code_maker'
 
 # Control the game
 class Game
   include Display
   include GameLogic
 
-  attr_reader :master_code, :mode, :turn
+  attr_reader :mode
 
   def initialize
-    @mode = Mode.new
-    @master_code = Code.new(mode.mode)
-    @turn = 1
-  end
-
-  def play
-    if @mode.mode == 1
-      turns(:maker_turn_description, :play_as_maker, :maker_outputs)
-    else
-      turns(:breaker_turn_description, :play_as_breaker?, :breaker_outputs)
-    end
+    ask_mode
+    @mode = mode_selection
+    @mode == '1' ? code_maker : code_breaker
   end
 
   private
 
-  def play_as_maker
-    # TO DO
+  def mode_selection
+    mode = gets.chomp
+    return mode if %w[1 2].include?(mode)
+
+    invalid_mode
+    mode_selection
   end
 
-  def play_as_breaker?
-    user_input = master_code.user_code
-    show_code(user_input.split(''))
-    return true if user_input == master_code.code
-
-    get_clues(user_input, master_code.code)
-    clues = @clues
-    show_clues(clues[:right], clues[:wrong_place])
-    false
+  def code_maker
+    maker = CodeMaker.new
+    maker.play
   end
 
-  # The first parameter will be a method of the display module that will be executed at the beginning of each turn
-  # The second parameter will be a method that will control how the game mode works
-  def turns(method_display, method_execution, outputs)
-    user_win = false
-    until turn > 12
-      method(method_display).call(turn)
-      user_win = method(method_execution).call
-      break if user_win
-
-      @turn += 1
-    end
-    method(outputs).call(user_win, master_code.code)
+  def code_breaker
+    breaker = CodeBreaker.new
+    breaker.play
   end
 end

@@ -3,12 +3,14 @@
 # module that provides methods to control the logic of the game
 module GameLogic
   def get_clues(master_code, guess_code)
-    tmp_master = master_code.clone.split('')
-    tmp_guess = guess_code.clone.split('')
+    tmp_master = master_code.clone
+    tmp_guess = guess_code.clone
     @clues = {}
     @clues[:right] = right_clues(tmp_master, tmp_guess)
     @clues[:wrong_place] = wrong_place_clues(tmp_master, tmp_guess)
   end
+
+  private
 
   def right_clues(master_code, guess_code)
     right = 0
@@ -24,11 +26,11 @@ module GameLogic
 
   def wrong_place_clues(master_code, guess_code)
     wrong_place = 0
-    guess_code.each_with_index do |item, index|
-      next unless item != '*' && master_code.include?(item)
+    guess_code.each_index do |index|
+      next unless guess_code[index] != '*' && master_code.include?(guess_code[index])
 
       wrong_place += 1
-      replace = master_code.find_index(item)
+      replace = master_code.find_index(guess_code[index])
       master_code[replace] = '='
       guess_code[index] = '='
     end
